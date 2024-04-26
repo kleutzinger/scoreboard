@@ -1,0 +1,11 @@
+{
+  "name": "scoreboard",
+  "version": "1.0.0",
+  "description": "scoreboard for super smash bros. melee streams",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "github.com/kleutzinger",
+  "license": "MIT"
+}
