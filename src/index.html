@@ -17,11 +17,24 @@
           @input="updateState"
         />
       </div>
+      <div>
+        <label for="p1Character">Player 1 Character:</label>
+        <select
+          id="p1Character"
+          v-model="state.p1Character"
+          @change="updateState"
+        >
+          <option value="Fox">Fox</option>
+          <option value="Falco">Falco</option>
+          <option value="Marth">Marth</option>
+        </select>
+      </div>
       <!-- Add input fields for other properties -->
 
       <!-- Remove the "Save State" button -->
     </div>
 
+    <script src="https://cdn.socket.io/4.3.1/socket.io.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
       const app = Vue.createApp({
@@ -29,34 +42,34 @@
           return {
             state: {
               p1Name: "Player 1",
+              p1Character: "Fox", // Default character
               // Add other properties with default values
             },
-            // get roomid from url
+            // Get room ID from URL
             roomId: window.location.pathname.split("/").pop(),
             socket: null,
           };
         },
         mounted() {
-          console.log("Mounted");
-          this.initWebSocket();
+          this.initSocket();
+          this.fetchState();
         },
         methods: {
-          initWebSocket() {
-            const wsUrl = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}`;
-            console.log("WebSocket URL:", wsUrl);
-            // Initialize WebSocket connection
-            this.socket = new WebSocket(wsUrl);
+          initSocket() {
+            // Initialize Socket.IO connection
+            this.socket = io();
 
-            // Listen for messages from the server
-            this.socket.addEventListener("message", (event) => {
-              console.log("Message from server:", event.data);
-              this.state = JSON.parse(event.data);
+            // Join the room upon connection
+            this.socket.emit("joinRoom", this.roomId);
+
+            // Listen for state updates from the server
+            this.socket.on("stateUpdate", (state) => {
+              console.log("Received state update:", state);
+              this.state = state;
             });
-
-            // Fetch initial state
-            this.fetchState();
           },
           fetchState() {
+            // Fetch initial state from the server
             fetch(`/getState/${this.roomId}`)
               .then((response) => response.json())
               .then((data) => {
@@ -67,24 +80,11 @@
               });
           },
           updateState() {
-            console.log("Updating state");
-            console.log(JSON.stringify(this.state));
-            fetch(`/updateState/${this.roomId}`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(this.state),
-            })
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Error updating state");
-                }
-                console.log("State updated successfully");
-              })
-              .catch((error) => {
-                console.error("Error updating state:", error);
-              });
+            // Send updated state to the server
+            this.socket.emit("updateState", {
+              roomId: this.roomId,
+              state: this.state,
+            });
           },
         },
       });

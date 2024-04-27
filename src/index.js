@@ -1,6 +1,6 @@
 const express = require("express");
 const http = require("http");
-const WebSocket = require("ws");
+const socketIo = require("socket.io");
 const Database = require("better-sqlite3");
 const bodyParser = require("body-parser");
 const fs = require("fs");
@@ -29,40 +29,35 @@ app.use(express.static("public"));
 // HTTP server
 const server = http.createServer(app);
 
-// WebSocket server
-const wss = new WebSocket.Server({ server });
+// Socket.IO server
+const io = socketIo(server);
 
-// Map to store WebSocket connections by room ID
-const roomConnections = new Map();
+// Handle Socket.IO connections
+io.on("connection", (socket) => {
+  console.log("Client connected:", socket.id);
 
-// WebSocket connection handler
-wss.on("connection", (ws, req) => {
-  // Extract room ID from URL
-  const roomId = req.url.split("/")[1];
-
-  // Store WebSocket connection in the map based on room ID
-  if (!roomConnections.has(roomId)) {
-    roomConnections.set(roomId, new Set());
-  }
-  roomConnections.get(roomId).add(ws);
-
-  // Handle messages from the client
-  ws.on("message", (message) => {
-    // Broadcast message to all clients in the same room
-    const connectionsInRoom = roomConnections.get(roomId);
-    for (const client of connectionsInRoom) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    }
+  // Handle joining a room
+  socket.on("joinRoom", (roomId) => {
+    console.log("Client", socket.id, "joined room:", roomId);
+    socket.join(roomId);
   });
 
-  // Handle disconnection
-  ws.on("close", () => {
-    roomConnections.get(roomId).delete(ws);
-    if (roomConnections.get(roomId).size === 0) {
-      roomConnections.delete(roomId);
-    }
+  // Handle state updates
+  socket.on("updateState", ({ roomId, state }) => {
+    console.log("Received state update for room", roomId);
+    // Update state in the database
+    const stmt = db.prepare(
+      "REPLACE INTO roomState (roomId, state) VALUES (?, ?)",
+    );
+    stmt.run(roomId, JSON.stringify(state));
+
+    // Broadcast updated state to all clients in the room
+    io.to(roomId).emit("stateUpdate", state);
+  });
+
+  // Handle disconnect
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
   });
 });
 
@@ -94,6 +89,9 @@ app.post("/updateState/:roomId", express.json(), (req, res) => {
     "REPLACE INTO roomState (roomId, state) VALUES (?, ?)",
   );
   stmt.run(roomId, JSON.stringify(state));
+
+  // Broadcast the updated state to all clients in the room
+  io.to(roomId).emit("stateUpdate", state);
 
   res.json({ status: "success", data: state });
 });
