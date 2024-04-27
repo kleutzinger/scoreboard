@@ -3,6 +3,7 @@ const http = require("http");
 const socketIo = require("socket.io");
 const Database = require("better-sqlite3");
 const bodyParser = require("body-parser");
+const jsonDiff = require("json-diff");
 const fs = require("fs");
 
 const app = express();
@@ -45,11 +46,21 @@ io.on("connection", (socket) => {
   // Handle state updates
   socket.on("updateState", ({ roomId, state }) => {
     console.log("Received state update for room", roomId);
-    // Update state in the database
-    const stmt = db.prepare(
+    // this is a race condition, but i don't care
+    const stmt = db.prepare("SELECT state FROM roomState WHERE roomId = ?");
+    const row = stmt.get(roomId);
+    let originalState = {};
+    if (row) {
+      originalState = JSON.parse(row.state);
+    }
+    // Calculate the difference between the new and old state
+    const diff = jsonDiff.diff(originalState, state);
+    console.log("diff", diff);
+    // Update the state in the database
+    const stmtInsert = db.prepare(
       "REPLACE INTO roomState (roomId, state) VALUES (?, ?)",
     );
-    stmt.run(roomId, JSON.stringify(state));
+    stmtInsert.run(roomId, JSON.stringify(state));
 
     // Broadcast updated state to all clients in the room
     io.to(roomId).emit("stateUpdate", state);
@@ -57,7 +68,12 @@ io.on("connection", (socket) => {
 
   // Handle disconnect
   socket.on("disconnect", () => {
-    console.log("Client disconnected:", socket.id);
+    console.log(
+      "Client disconnected:",
+      socket.id,
+      "total clients connected: ",
+      io.engine.clientsCount,
+    );
   });
 });
 

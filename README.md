@@ -26,23 +26,22 @@ Server / Webapp
 
 - [x] make a fake endpoint that serves the spec as json
   - https://serve-gist.kevbot.xyz/?url=https://gist.githubusercontent.com/kleutzinger/8ea57f477ed0b7b91c2657f8cd0c0e1b/raw/8fd0abb62503616ec35eb7abd50c2ca027b42edd/scoreboard.json
-- [ ] copy [spec from](https://github.com/Readek/Melee-Stream-Tool/blob/master/Stream%20Tool/Resources/Texts/ScoreboardInfo.json)
+- [x] copy [spec from](https://github.com/Readek/Melee-Stream-Tool/blob/master/Stream%20Tool/Resources/Texts/ScoreboardInfo.json)
 - [ ] Copy over resources from https://github.com/Readek/Melee-Stream-Tool/tree/master/Stream%20Tool/Resources
 - [x] make express server
-- [ ]? how to store state? maybe just in memory for now
-- [ ] make json endpoint for scoreboard state
-- [ ] separate into rooms (?) e.g. /924, /abbey, or maybe tied to a twitch channel?? (e.g. /sfmelee)
-- [ ] make a way to update the scoreboard
-- [ ] websocket for updating client
+- [x]? how to store state? maybe just in memory for now
+- [x] make json endpoint for scoreboard state
+- [x] separate into rooms (?) e.g. /924, /abbey, or maybe tied to a twitch channel?? (e.g. /sfmelee)
+- [x] make a way to update the scoreboard
+- [x] websocket for updating client
 - [ ] watch a given twitch stream chat for `!score 1 2` commands (maybe check for moderator status at first)
 - [ ] maybe add more !commands later (!p1tag !p2tag !round at least)
-- [ ] maybe have the frontend poll the server state as well?
 
 Desktop Client
 
 - [x] make bun client.js
 - [x] make client that reads from the json endpoint above
-- [ ] make client poll the endpoint every x seconds
+- [x] make client poll the endpoint every x seconds
 - [ ] read appropriate resources from Resources/ dir
 - [ ] obs instructions
 - [ ] evenutally make client/ folder?
