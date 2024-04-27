@@ -1,5 +1,11 @@
 ## Overall Approach
 
+#### Stack
+
+- Node + express for the Server
+- Vue.js + socket.io for the webapp
+- bun.js for the desktop client
+
 #### Server / Webapp
 
 - This is the thing that will serve the scoreboard state / and scoreboard editing frontend
@@ -13,6 +19,7 @@
 - This is the thing that will read the site and write the files for obs to ingest
 - Probably use [bun.js](https://bun.sh/), so this can be a single file
 - run some simple client that pulls from the webserver, say every 5 seconds (or be cool and use websockets) or something and writes the p1_char.txt, p2_score.txt, etc to a specified output dir.
+- currently polls, may eventually use websockets
 
 ## Stuff
 
@@ -47,3 +54,7 @@ Desktop Client
 - [ ] evenutally make client/ folder?
 - [ ] add windows .bat runfile
 - [ ] add --output-dir flag to specify output dir (default to $cwd/output)
+
+Other
+
+- [x] make demo

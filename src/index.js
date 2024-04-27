@@ -112,6 +112,11 @@ app.post("/updateState/:roomId", express.json(), (req, res) => {
   res.json({ status: "success", data: state });
 });
 
+// forward / to /abbey
+app.get("/", (req, res) => {
+  res.redirect("/abbey");
+});
+
 // Fallback route to serve the Vue.js app
 app.get("/*", (req, res) => {
   res.sendFile(__dirname + "/index.html");
