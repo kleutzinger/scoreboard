@@ -7,7 +7,7 @@ const fs = require("fs");
 
 const app = express();
 app.use(bodyParser.json());
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
 
 // Connect to SQLite database
 const db = new Database(":memory:");
