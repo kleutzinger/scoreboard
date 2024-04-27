@@ -11,7 +11,10 @@
   "author": "github.com/kleutzinger",
   "license": "MIT",
   "dependencies": {
+    "better-sqlite3": "^9.6.0",
+    "body-parser": "^1.20.2",
     "express": "^4.19.2",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "ws": "^8.16.0"
   }
 }
