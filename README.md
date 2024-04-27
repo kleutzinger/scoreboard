@@ -36,13 +36,21 @@ Server / Webapp
 - [x] copy [spec from](https://github.com/Readek/Melee-Stream-Tool/blob/master/Stream%20Tool/Resources/Texts/ScoreboardInfo.json)
 - [ ] Copy over resources from https://github.com/Readek/Melee-Stream-Tool/tree/master/Stream%20Tool/Resources
 - [x] make express server
-- [x]? how to store state? maybe just in memory for now
+- [x] how to store state? maybe just in memory for now
+- [ ] add rest of server state to UI
 - [x] make json endpoint for scoreboard state
 - [x] separate into rooms (?) e.g. /924, /abbey, or maybe tied to a twitch channel?? (e.g. /sfmelee)
 - [x] make a way to update the scoreboard
 - [x] websocket for updating client
 - [ ] watch a given twitch stream chat for `!score 1 2` commands (maybe check for moderator status at first)
 - [ ] maybe add more !commands later (!p1tag !p2tag !round at least)
+- [ ] (zod?) validation for the scoreboard state (don't want super giant states or whatever)
+- [ ] stretch goal: take a start.gg set link and auto-populate
+- [ ] stretch goal: remember players tags / characters.
+- [ ] actually persist sqlite to disk rather than memory
+  - [ ] dokku make storage dir
+- [ ] add a way to reset the scoreboard
+- [ ] swap players
 
 Desktop Client
 
