@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
     const diff = jsonDiff.diff(originalState, state);
     console.log("diff", diff);
     // Update the state in the database
+    state.stateUpdater = socket.id;
     const stmtInsert = db.prepare(
       "REPLACE INTO roomState (roomId, state) VALUES (?, ?)",
     );
