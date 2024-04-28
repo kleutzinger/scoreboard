@@ -65,8 +65,8 @@
 
             // Listen for state updates from the server
             this.socket.on("stateUpdate", (state) => {
+              if (state?.meta?.stateUpdater === this.socket.id) return; // update received from self, ignore
               console.log("Received state update:", state);
-              if (state.stateUpdater === this.socket.id) return; // update received from self, ignore
               this.state = state;
             });
           },

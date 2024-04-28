@@ -5,6 +5,7 @@ const Database = require("better-sqlite3");
 const bodyParser = require("body-parser");
 const jsonDiff = require("json-diff");
 const fs = require("fs");
+const _ = require("lodash");
 
 const app = express();
 app.use(bodyParser.json());
@@ -54,10 +55,11 @@ io.on("connection", (socket) => {
       originalState = JSON.parse(row.state);
     }
     // Calculate the difference between the new and old state
-    const diff = jsonDiff.diff(originalState, state);
-    console.log("diff", diff);
-    // Update the state in the database
-    state.stateUpdater = socket.id;
+    state.meta = state.meta || {};
+    state.meta.stateUpdater = socket.id;
+    state.meta.updateTime = new Date().toISOString();
+    const omitMeta = (obj) => _.omit(obj, "meta");
+    console.log(jsonDiff.diff(omitMeta(originalState), omitMeta(state)));
     const stmtInsert = db.prepare(
       "REPLACE INTO roomState (roomId, state) VALUES (?, ?)",
     );
