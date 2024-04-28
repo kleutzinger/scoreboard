@@ -1,97 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stream Overlay Editor</title>
+    <meta charset="utf-8" />
+    <title>Basic JSON Editor Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
   </head>
   <body>
-    <div id="app">
-      <h1>Stream Overlay Editor</h1>
-      <h2>Room Name: {{ roomId }}</h2>
-      <div>
-        <label for="p1Name">Player 1 Name:</label>
-        <input
-          type="text"
-          id="p1Name"
-          v-model="state.p1Name"
-          @input="updateState"
-        />
-      </div>
-      <div>
-        <label for="p1Character">Player 1 Character:</label>
-        <select
-          id="p1Character"
-          v-model="state.p1Character"
-          @change="updateState"
-        >
-          <option value="Fox">Fox</option>
-          <option value="Falco">Falco</option>
-          <option value="Marth">Marth</option>
-        </select>
-      </div>
-      <!-- Add input fields for other properties -->
+    <h1>Basic JSON Editor Example</h1>
 
-      <!-- Remove the "Save State" button -->
-    </div>
+    <div id="editor_holder"></div>
+    <button id="submit">Submit (console.log)</button>
 
-    <script src="https://cdn.socket.io/4.3.1/socket.io.min.js"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
-      const app = Vue.createApp({
-        data() {
-          return {
-            state: {
-              p1Name: "Player 1",
-              p1Character: "Fox", // Default character
-              // Add other properties with default values
-            },
-            // Get room ID from URL
-            roomId: window.location.pathname.split("/").pop(),
-            socket: null,
-          };
-        },
-        mounted() {
-          this.initSocket();
-          this.fetchState();
-        },
-        methods: {
-          initSocket() {
-            // Initialize Socket.IO connection
-            this.socket = io();
-
-            // Join the room upon connection
-            this.socket.emit("joinRoom", this.roomId);
-
-            // Listen for state updates from the server
-            this.socket.on("stateUpdate", (state) => {
-              if (state?.meta?.stateUpdater === this.socket.id) return; // update received from self, ignore
-              console.log("Received state update:", state);
-              this.state = state;
-            });
-          },
-          fetchState() {
-            // Fetch initial state from the server
-            fetch(`/getState/${this.roomId}`)
-              .then((response) => response.json())
-              .then((data) => {
-                this.state = data;
-              })
-              .catch((error) => {
-                console.error("Error fetching state:", error);
-              });
-          },
-          updateState() {
-            // Send updated state to the server
-            this.socket.emit("updateState", {
-              roomId: this.roomId,
-              state: this.state,
-            });
-          },
-        },
+      // Initialize the editor with a JSON schema
+      var editor = new JSONEditor(document.getElementById("editor_holder"), {
+        ajax: true,
+        schema: { $ref: "/schema.json" },
       });
 
-      app.mount("#app");
+      // Hook up the submit button to log to the console
+      document.getElementById("submit").addEventListener("click", function () {
+        // Get the value from the editor
+        console.log(editor.getValue());
+      });
     </script>
   </body>
 </html>

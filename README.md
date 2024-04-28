@@ -26,6 +26,7 @@
 - https://github.com/Readek/Melee-Stream-Tool (prior art, but not web-based)
 - https://www.start.gg/tournament/melee-abbey-tavern-43/event/melee-singles/set/73770319
 - https://developer.start.gg/docs/examples/queries/set-score
+- https://github.com/Sheepolution/Melee-Ghost-Streamer
 
 ## Todo
 

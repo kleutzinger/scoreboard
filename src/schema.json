@@ -1,0 +1,147 @@
+{
+  "type": "object",
+  "properties": {
+    "p1Name": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "p1Team": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "p1Character": {
+      "$ref": "#/definitions/characters"
+    },
+    "p1Skin": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "p1Color": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "p1Score": {
+      "type": "integer"
+    },
+    "p1WL": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "p2Name": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "p2Team": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "p2Character": {
+      "$ref": "#/definitions/characters"
+    },
+    "p2Skin": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "p2Color": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "p2Score": {
+      "type": "integer"
+    },
+    "p2WL": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "bestOf": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "round": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "tournamentName": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "caster1Name": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "caster1Twitter": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "caster1Twitch": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "caster2Name": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "caster2Twitter": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "caster2Twitch": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "allowIntro": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "p1Name",
+    "p1Character",
+    "p1Score",
+    "p2Name",
+    "p2Character",
+    "p2Score",
+    "bestOf",
+    "round",
+    "tournamentName",
+    "caster1Name",
+    "caster1Twitter",
+    "caster1Twitch",
+    "caster2Name",
+    "caster2Twitter",
+    "caster2Twitch",
+    "allowIntro"
+  ],
+  "definitions": {
+    "characters": {
+      "type": "string",
+      "enum": [
+        "Fox",
+        "Falco",
+        "Marth",
+        "Sheik",
+        "Jigglypuff",
+        "Peach",
+        "Ice Climbers",
+        "Captain Falcon",
+        "Pikachu",
+        "Samus",
+        "Dr. Mario",
+        "Yoshi",
+        "Luigi",
+        "Ganondorf",
+        "Mario",
+        "Young Link",
+        "Donkey Kong",
+        "Link",
+        "Mr. Game & Watch",
+        "Roy",
+        "Mewtwo",
+        "Ness",
+        "Zelda",
+        "Pichu",
+        "Kirby",
+        "Bowser"
+      ]
+    }
+  }
+}

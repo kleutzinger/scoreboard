@@ -115,6 +115,10 @@ app.post("/updateState/:roomId", express.json(), (req, res) => {
   res.json({ status: "success", data: state });
 });
 
+app.get("/schema.json", (req, res) => {
+  res.sendFile(__dirname + "/schema.json");
+});
+
 // forward / to /abbey
 app.get("/", (req, res) => {
   res.redirect("/abbey");
